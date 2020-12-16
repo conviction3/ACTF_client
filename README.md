@@ -13,7 +13,7 @@ make init
 ## milestone
 ### 1. 2020-12-17
 - 描述：完成两个客户端的分布式加法计算
-- commit: `534455f2`
+- commit: `1972356c`
 - run: 
 ```shell script
 # 先启动服务端，进入服务端目录下，执行:
