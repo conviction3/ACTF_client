@@ -14,3 +14,7 @@ class UtilsTestSuite(unittest.TestCase):
         data = read_csv_int(file_name=test_file_name, from_index=0, to_index=4)
         sum = add(data)
         self.assertEqual(10, sum)
+
+    def test_string2bytes(self):
+        string = "2345"
+        self.assertEqual(b'2345', string2bytes(string))

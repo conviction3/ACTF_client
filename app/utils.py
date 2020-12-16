@@ -27,3 +27,7 @@ def add(data_list: list) -> int:
     todo: 拓展类型
     """
     return sum(data_list)
+
+
+def string2bytes(string: str) -> bytes:
+    return bytes(string, encoding="utf-8")
