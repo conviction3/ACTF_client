@@ -1,7 +1,16 @@
 from app.utils import *
 import unittest
 
-test_file_name = "../data/distribution_add_data_1.csv"
+import os
+import sys
+
+pwd = os.getcwd()
+parent_path = os.path.abspath(os.path.dirname(pwd) + os.path.sep + ".")
+sys.path.append(parent_path)
+
+test_file_name = "data/distribution_add_data_1.csv"
+# 在pycharm中运行用相对路径
+# test_file_name = "../data/distribution_add_data_1.csv"
 
 
 class UtilsTestSuite(unittest.TestCase):

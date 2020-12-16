@@ -1,9 +1,9 @@
 import socket  # 导入 socket 模块
 from app.utils import *
 
-file_name = "../data/distribution_add_data_1.csv"
-from_index = 0
-to_index = 50
+file_name = "data/distribution_add_data_1.csv"
+from_index = 50
+to_index = -1
 
 if __name__ == '__main__':
     s = socket.socket()  # 创建 socket 对象
