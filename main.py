@@ -11,7 +11,7 @@ if __name__ == '__main__':
     # local host name
     host = socket.gethostname()
     # set server/proxy port
-    port = 12345
+    port = 23456
     s.connect((host, port))
 
     data_list = read_csv_int(file_name, from_index, to_index)
