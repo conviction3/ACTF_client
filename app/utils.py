@@ -4,11 +4,11 @@ import csv
 def read_csv_int(file_name: str, from_index: int, to_index: int) -> list:
     """
     read data from csv file
-    :param file_name:   要读取的文件名
-    :param from_index: 开始下标，从0开始，包括from_index
-    :param to_index: 结束下标，从0开始，不包括to_index
+    :param file_name:   file name will be read
+    :param from_index: start index, start from 0, include from_index
+    :param to_index: end index,start from 0, exclude to_index
     :return: list of int
-    todo: 分块读取大文件
+    todo: use parquet
     """
     result_list = []
     with open(file_name, 'r') as f:
@@ -21,10 +21,10 @@ def read_csv_int(file_name: str, from_index: int, to_index: int) -> list:
 
 def add(data_list: list) -> int:
     """
-    对list of int 求和
+    sum of the list of int
     :param data_list: list of int
     :return: sum
-    todo: 拓展类型
+    todo: extend type
     """
     return sum(data_list)
 
