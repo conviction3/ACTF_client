@@ -4,8 +4,8 @@ init:
 #	.\venv\Scripts\activate
 	#.\venv\Scripts\pip install -r requirements.txt -i https://mirrors.aliyun.com/pypi/simple/
 
-#install:
-	#.\venv\Scripts\pip install -r requirements.txt -i https://mirrors.aliyun.com/pypi/simple/
+install:
+	.\venv\Scripts\pip install -r requirements.txt -i https://mirrors.aliyun.com/pypi/simple/
 
 run:
 	.\venv\Scripts\python main.py
