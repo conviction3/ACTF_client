@@ -2,12 +2,9 @@ from package import Package, PackageWithTimer, Header, send_package, receive_pac
 from socket import socket as Socket
 from typing import List
 from threading import Thread, Lock, Timer
+from app.utils import Logger
 
-import logging
-
-logging.basicConfig(filename="./log/client.log", level=logging.INFO,
-                    format="[%(asctime)s]: %(name)s %(levelname)s %(message)s")
-
+log=Logger()
 
 class Client:
     def __init__(self, socket, initial_cwnd: int = 1, initial_ssthresh: int = 24, initial_rto: int = 500):
@@ -40,7 +37,7 @@ class Client:
         self.sent_buffer: List[PackageWithTimer] = []
         self.socket: Socket = socket
         # todo: finish log
-        logging.info(f"Client started")
+        log.info(f"Client started")
 
         # self.start_receive_thread()
         # self.start_send_thread()
@@ -101,7 +98,7 @@ class Client:
         :return:
         """
         if len(self.waiting_for_send_buffer) == 0:
-            logging.warning(f"[!!] waiting_for_send_buffer is empty, can not be transmitted now!")
+            log.warning(f"[!!] waiting_for_send_buffer is empty, can not be transmitted now!")
             return
         for i in range(len(self.waiting_for_send_buffer)):
             package = self.waiting_for_send_buffer[0]
@@ -111,7 +108,7 @@ class Client:
             send_package(package, self.socket)
 
             header = package.get_header()
-            logging.debug(f"[->] Transmit package {header.get_package_hashcode().hex()}\t "
+            log.debug(f"[->] Transmit package {header.get_package_hashcode().hex()}\t "
                           f"message: {header.get_message(parse=True)}\t "
                           f"payload size: {header.get_package_len(parse=True)}"
                           )
@@ -153,4 +150,4 @@ class Client:
         package = package_with_timer.package
         self.waiting_for_send_buffer.append(package)
         self.sent_buffer.remove(package_with_timer)
-        logging.debug(f"[.] Package xxx is out of time, will be retransmitted.")
+        log.debug(f"[.] Package xxx is out of time, will be retransmitted.")

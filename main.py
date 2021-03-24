@@ -3,9 +3,7 @@ from app.utils import *
 import time
 from client import Client
 
-file_name = "data/distribution_add_data_1.csv"
-from_index = 0
-to_index = 50
+log = Logger()
 
 if __name__ == '__main__':
     # create socket instance
@@ -14,9 +12,14 @@ if __name__ == '__main__':
     host = socket.gethostname()
     # set server/proxy port
     port = 23456
+    log.info("""
+        ___    ______ ______ ______   ______ __     ____ ______ _   __ ______
+       /   |  / ____//_  __// ____/  / ____// /    /  _// ____// | / //_  __/
+      / /| | / /      / /  / /_     / /    / /     / / / __/  /  |/ /  / /
+     / ___ |/ /___   / /  / __/    / /___ / /___ _/ / / /___ / /|  /  / /
+    /_/  |_|\____/  /_/  /_/       \____//_____//___//_____//_/ |_/  /_/
 
-    print(f"waiting for connecting to proxy {host}:{port}")
+     """)
     s.connect((host, port))
 
     client = Client(socket=s)
-
