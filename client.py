@@ -4,7 +4,8 @@ from typing import List
 from threading import Thread, Lock, Timer
 from app.utils import Logger
 
-log=Logger()
+log = Logger()
+
 
 class Client:
     def __init__(self, socket, initial_cwnd: int = 1, initial_ssthresh: int = 24, initial_rto: int = 500):
@@ -39,7 +40,7 @@ class Client:
         # todo: finish log
         log.info(f"Client started")
 
-        # self.start_receive_thread()
+        self.start_receive_thread()
         # self.start_send_thread()
 
     def add_data(self, item: Package):
@@ -84,11 +85,18 @@ class Client:
     def start_receive_thread(self):
         def temp():
             while True:
-                self.socket.recv(self.socket)
+                result = receive_package(self.socket)
+                if isinstance(result, Header):
+                    header = result
+                # elif isinstance(result, Package):
+                else:
+                    header = result.get_header()
+                log.debug(f"<- message: \"{header.get_message(parse=True)}\" "
+                          f"| hash: {header.get_package_hashcode().hex()}")
 
-        # t = Thread()
-        # t.start()
-        # t.join()
+        t = Thread(target=temp)
+        t.start()
+        t.join()
 
     def transmit_the_buffer(self):
         """
@@ -109,9 +117,9 @@ class Client:
 
             header = package.get_header()
             log.debug(f"[->] Transmit package {header.get_package_hashcode().hex()}\t "
-                          f"message: {header.get_message(parse=True)}\t "
-                          f"payload size: {header.get_package_len(parse=True)}"
-                          )
+                      f"message: {header.get_message(parse=True)}\t "
+                      f"payload size: {header.get_package_len(parse=True)}"
+                      )
 
             package_with_timer = PackageWithTimer(package)
             self.sent_buffer.append(package_with_timer)

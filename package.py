@@ -4,9 +4,9 @@ import hashlib
 
 
 class PackageDataType(Enum):
-    BINARY = 0x00
-    INT = 0x01
-    UTF8_STR = 0x02
+    BINARY = bytes(0x00)
+    INT = bytes(0x01)
+    UTF8_STR = bytes(0x02)
 
     @staticmethod
     def get_type_by_value(value) -> Enum:
@@ -19,8 +19,8 @@ class PackageDataType(Enum):
 class Header:
     """
     ------------------------------------------------------------------------------------------
-    | 0                4B                  36B                37B         69B          1024B |
-    |         4B        |        32B       |        1B         |    32B    |       955B      |
+    | 0                4B                  20B                21B         37B          1024B |
+    |         4B        |        16B       |        1B         |    16B    |       987B      |
     | length of package | package hashcode | package data type |    ACK    | message string  |
     ------------------------------------------------------------------------------------------
 
@@ -32,15 +32,15 @@ class Header:
     ACK                 :       Acknowledge character, the value is one of the identifier of the packages. Zero
                             for none.
     package data type   :       See the supported types in PackageDataType below.
-    message string      :       Must encode with utf-8, could store 955 pure ASCII characters or 318 pure Chinese
+    message string      :       Must encode with utf-8, could store 987 pure ASCII characters or 329 pure Chinese
                             characters.
     """
     HEADER_LEN = 1024
     HEADER_PACKAGE_LEN_OFFSET, HEADER_PACKAGE_LEN_LEN = 0, 4
-    HEADER_PACKAGE_HASHCODE_OFFSET, HEADER_PACKAGE_HASHCODE_LEN = 4, 32
-    HEADER_PACKAGE_DATATYPE_OFFSET, HEADER_PACKAGE_DATATYPE_LEN = 36, 1
-    HEADER_ACK_OFFSET, HEADER_ACK_LEN = 37, 32
-    HEADER_MESSAGE_OFFSET, HEADER_MESSAGE_LEN = 69, 955
+    HEADER_PACKAGE_HASHCODE_OFFSET, HEADER_PACKAGE_HASHCODE_LEN = 4, 16
+    HEADER_PACKAGE_DATATYPE_OFFSET, HEADER_PACKAGE_DATATYPE_LEN = 20, 1
+    HEADER_ACK_OFFSET, HEADER_ACK_LEN = 21, 16
+    HEADER_MESSAGE_OFFSET, HEADER_MESSAGE_LEN = 37, 987
 
     def __init__(self,
                  package_len: bytes = b'\x00' * HEADER_PACKAGE_LEN_LEN,
@@ -256,20 +256,40 @@ def send_package(package: Package, sock: Socket):
     sock.send(header.get_header_data())
     sock.send(payload)
 
-
 def receive_package(sock: Socket):
-    # parse header
+    """
+        Receive the header first, then receive the package if has.
+    :param sock:
+    :return:    Header object if the size of package is zero.
+                Package object if the size of package is not zero,
+            but there's still a header object in the package object.
+    """
     header_data = sock.recv(Header.HEADER_LEN)
 
     header = Header()
     header.load_from_header_data(header_data)
 
-    # package_len = int.from_bytes(header_data[:Header.HEADER_PACKAGE_LEN_LEN], byteorder='big', signed=False)
-    #
-    # if package_len == 0:
-    #
-    # b_package_hashcode = header_data[Header.HEADER_PACKAGE_HASHCODE_OFFSET:
-    #                                  Header.HEADER_PACKAGE_HASHCODE_OFFSET + Header.HEADER_PACKAGE_HASHCODE_LEN]
+    if not header.has_package():
+        return header
+    payload = sock.recv(header.get_package_len(parse=True))
+    data_type = header.get_package_data_type(parse=True)
+
+    package = Package(payload=payload, data_type=data_type, header=header)
+    return package
+
+# def receive_package(sock: Socket):
+#     # parse header
+#     header_data = sock.recv(Header.HEADER_LEN)
+#
+#     header = Header()
+#     header.load_from_header_data(header_data)
+#
+#     # package_len = int.from_bytes(header_data[:Header.HEADER_PACKAGE_LEN_LEN], byteorder='big', signed=False)
+#     #
+#     # if package_len == 0:
+#     #
+#     # b_package_hashcode = header_data[Header.HEADER_PACKAGE_HASHCODE_OFFSET:
+#     #                                  Header.HEADER_PACKAGE_HASHCODE_OFFSET + Header.HEADER_PACKAGE_HASHCODE_LEN]
 
 
 class LackOfMessageException(Exception):

@@ -4,7 +4,7 @@ import logging.handlers
 
 
 class Logger(logging.Logger):
-    def __init__(self, name: str=None, filename=None):
+    def __init__(self, name: str = None, filename=None):
         super().__init__(name)
         if filename is None:
             filename = './logs/client.log'
@@ -24,7 +24,7 @@ class Logger(logging.Logger):
         ch.setLevel(logging.DEBUG)
 
         formatter = logging.Formatter(
-            '[%(asctime)s] - %(filename)s [Line:%(lineno)d] - [%(levelname)s]-[thread:%(thread)s]-[process:%(process)s] - %(message)s')
+            '[%(asctime)s] - %(filename)s [Line:%(lineno)d] - [%(levelname)5s]-[thread:%(thread)s]-[process:%(process)s] : %(message)s')
         fh.setFormatter(formatter)
         ch.setFormatter(formatter)
 
