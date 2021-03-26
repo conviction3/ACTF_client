@@ -1,8 +1,9 @@
-from package import Package, PackageWithTimer, Header, send_package, receive_package
+from package import Package, PackageWithTimer, Header, send_package, receive_package, PackageDataType
 from socket import socket as Socket
 from typing import List
 from threading import Thread, Lock, Timer
-from app.utils import Logger
+from app.utils import Logger, int2bytes
+import time
 
 log = Logger()
 
@@ -37,8 +38,6 @@ class Client:
         """
         self.sent_buffer: List[PackageWithTimer] = []
         self.socket: Socket = socket
-        # todo: finish log
-        log.info(f"Client started")
 
         self.start_receive_thread()
         # self.start_send_thread()
@@ -88,15 +87,46 @@ class Client:
                 result = receive_package(self.socket)
                 if isinstance(result, Header):
                     header = result
-                # elif isinstance(result, Package):
+                    log.debug(f"<- message: \"{header.get_message()}\" "
+                              f"| hash: {header.get_package_hashcode()}")
                 else:
+                    package = result
                     header = result.get_header()
-                log.debug(f"<- message: \"{header.get_message(parse=True)}\" "
-                          f"| hash: {header.get_package_hashcode().hex()}")
+                    self.start_consume_thread(package)
+                    log.debug("<- " + package.get_desc())
 
         t = Thread(target=temp)
         t.start()
-        t.join()
+
+    def start_consume_thread(self, package: Package):
+        """
+            Do calculate
+        :param package:
+        :return:
+        """
+
+        def temp():
+            payload: List[int] = package.get_payload(parse=True)
+            header = package.get_header()
+            package_hashcode = header.get_package_hashcode(parse=True)
+
+            log.info(f"--> Consuming package {package_hashcode}, job started.")
+            # todo: different type of calculation methods
+            cal_result: int = 0
+            for item in payload:
+                cal_result += item
+            time.sleep(2)
+            log.info(f"<-- Finished  package {package_hashcode}, job ended.")
+            # Sending the result to proxy
+            result_package = Package(payload=int2bytes(cal_result), data_type=PackageDataType.INT)
+            result_package.generate_default_header(msg=f"calculate result of {package_hashcode}")
+            result_package.get_header().set_ack(header.get_package_hashcode())
+            send_package(result_package, self.socket)
+            log.info(f"-> {result_package.get_desc()}")
+
+        t = Thread(target=temp)
+        t.start()
+        # No join() allowed here
 
     def transmit_the_buffer(self):
         """

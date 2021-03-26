@@ -1,19 +1,36 @@
 from socket import socket as Socket
 from enum import Enum
 import hashlib
+from app.utils import bytes_to_int_list
 
 
 class PackageDataType(Enum):
-    BINARY = bytes(0x00)
-    INT = bytes(0x01)
-    UTF8_STR = bytes(0x02)
+    BINARY = b'\x00'
+    # size of int must be 4 bytes, signed
+    INT = b'\x01'
+    UTF8_STR = b'\x02'
 
     @staticmethod
-    def get_type_by_value(value) -> Enum:
+    def get_type_by_value(value: bytes) -> Enum:
         for name, member in PackageDataType.__members__.items():
             if member.value == value:
                 return member
         raise ValueError()
+
+    @staticmethod
+    def parse_to_str(value) -> str:
+        if isinstance(value, PackageDataType):
+            _type = value
+        elif isinstance(value, bytes):
+            _type = PackageDataType.get_type_by_value(value)
+        else:
+            raise ValueError()
+        if _type == PackageDataType.BINARY:
+            return "binary"
+        if _type == PackageDataType.INT:
+            return "integer"
+        if _type == PackageDataType.UTF8_STR:
+            return "string"
 
 
 class Header:
@@ -68,7 +85,7 @@ class Header:
         self.set_message(header_data[self.HEADER_MESSAGE_OFFSET:self.HEADER_MESSAGE_OFFSET + self.HEADER_MESSAGE_LEN])
 
     def get_header_data(self) -> bytes:
-        header_data: bytes = self.__package_len + self.__package_hashcode + self.__ack + self.__package_data_type + self.__message
+        header_data: bytes = self.__package_len + self.__package_hashcode + self.__package_data_type + self.__ack + self.__message
         if len(header_data) != self.HEADER_LEN:
             raise BytesLengthError()
         return header_data
@@ -106,8 +123,17 @@ class Header:
         else:
             raise TypeError("Unsupported package hashcode type!")
 
-    def get_package_hashcode(self):
-        return self.__package_hashcode
+    def get_package_hashcode(self, parse=False):
+        """
+
+        :param parse:
+        :return:
+                bytes   if parse=False
+                str     if parse=True
+        """
+        if not parse:
+            return self.__package_hashcode
+        return self.__package_hashcode.hex()
 
     def set_package_data_type(self, data_type):
         if data_type is None:
@@ -134,8 +160,19 @@ class Header:
         else:
             raise TypeError("Unsupported ACK type!")
 
-    def get_ack(self):
-        return self.__ack
+    def get_ack(self, parse=False):
+        """
+        :param parse:
+        :return:
+                    bytes   if parse=False
+                    string  if parse=True
+        """
+
+        if not parse:
+            return self.__ack
+        if self.__ack == b'\x00' * self.HEADER_ACK_LEN:
+            return ""
+        return self.__ack.hex()
 
     def set_message(self, message):
         if message is None:
@@ -160,43 +197,6 @@ class Header:
             return None
         return self.__message.decode()
 
-    # def get_package_len(self,):
-
-    # def __init__(self, package_len: int = 0, package_hashcode: bytes = None, ack: bytes = b'\x00' * 4,
-    #              package_data_type: PackageDataType = PackageDataType.BINARY, message: str = None):
-    #     """
-    #     :param message:         If message is not none, then the value about package could be none.
-    #     :param package_len:     1MBytes=1048576Bytes most
-    #                             The max integer value of 4B is 4294967295, which
-    #                         is far enough for the bytes'number of 1MB.
-    #     """
-    #     if (package_hashcode is not None and len(package_hashcode) != self.HEADER_PACKAGE_HASHCODE_LEN) \
-    #             or len(ack) != self.HEADER_ACK_LEN:
-    #         raise BytesLengthError()
-    #     if package_len != 0:
-    #         if package_hashcode is None:
-    #             raise LackOfPackageHashcodeException()
-    #     if message is None and package_len == 0:
-    #         raise LackOfMessageException()
-    #     if message is not None and len(message.encode()) > self.HEADER_MESSAGE_LEN:
-    #         raise MessageOutOfSizeException()
-    #
-    #     self.package_len: bytes = package_len.to_bytes(length=4, byteorder='big', signed=False)
-    #     self.package_hashcode: bytes = b'\x00' * self.HEADER_PACKAGE_HASHCODE_LEN if package_hashcode is None \
-    #         else package_hashcode
-    #     self.ack: bytes = ack
-    #     self.package_data_type: bytes = package_data_type.value
-    #     if message is None:
-    #         self.message: bytes = b'\x00' * self.HEADER_MESSAGE_LEN
-    #     else:
-    #         temp: bytes = message.encode()
-    #         if len(temp) < self.HEADER_MESSAGE_LEN:
-    #             temp += b'\x00' * (self.HEADER_MESSAGE_LEN - len(temp))
-    #         self.message: bytes = temp
-    #
-    #     self.data: bytes = self.package_len + self.package_hashcode + self.ack + self.package_data_type + self.message
-    #     assert len(self.data) == self.HEADER_LEN
-
 
 class Package:
     def __init__(self, payload: bytes, data_type: PackageDataType, header: Header = None):
@@ -207,35 +207,47 @@ class Package:
     def get_header(self):
         return self.__header
 
-    def get_payload(self):
-        return self.__payload
+    def get_payload(self, parse=False):
+        """
+        :param parse:
+        :return:
+                bytes       if the parse=False
+                List[int]   if the datatype of payload is int
+        """
 
-    def generate_default_header(self):
+        if not parse:
+            return self.__payload
+        if self.__data_type == PackageDataType.INT:
+            return bytes_to_int_list(self.__payload)
+
+    def generate_default_header(self, msg: str = None):
         header = Header()
-        header.set_package_len(len(self.get_payload()))
+        header.set_message(msg)
+        header.set_package_len(len(self.__payload))
+        header.set_package_data_type(self.__data_type.value)
 
         hash_value: bytes = hashlib.md5(self.__payload).digest()
         header.set_package_hashcode(hash_value)
 
         self.__header = header
 
-    # def __init__(self, payload: bytes, package_hashcode: bytes, message: str = None,
-    #              datatype: PackageDataType = PackageDataType.BINARY, header=None):
-    #     """
-    #         Every package has a header, the header contains the package's length,
-    #     before sending the package, must send header first, otherwise the receiver
-    #     has no idea to the package's size.
-    #     """
-    #     self.payload = payload
-    #     if header is not None:
-    #         self.header = header
-    #     else:
-    #         header = Header()
-    #         header.set_package_len(package_len=len(payload))
-    #         header.set_package_hashcode(hashcode=package_hashcode)
-    #         header.set_package_data_type(data_type=datatype)
-    #         header.set_message(message=message)
-    #         self.header = header
+    def get_desc(self) -> str:
+        """
+            Package description, for print or log
+        :return:
+        """
+        header = self.get_header()
+        package_hash_code = header.get_package_hashcode(parse=True)
+        message = header.get_message(parse=True)
+        package_length = header.get_package_len(parse=True)
+        ack = header.get_ack(parse=True)
+        data_type = PackageDataType.parse_to_str(self.__data_type)
+
+        return f"hash: {package_hash_code} | " \
+               f"message: \"{message}\" | " \
+               f"package length: {package_length} | " \
+               f"payload data type: {data_type} | " \
+               f"ACK: {ack} | "
 
 
 class PackageWithTimer:
@@ -250,15 +262,17 @@ class PackageWithTimer:
 
 
 def send_package(package: Package, sock: Socket):
-    header = package.header
-    payload = package.payload
+    header = package.get_header()
+    payload = package.get_payload()
 
     sock.send(header.get_header_data())
     sock.send(payload)
 
+
 def receive_package(sock: Socket):
     """
         Receive the header first, then receive the package if has.
+    Parse the bytes into Package Class
     :param sock:
     :return:    Header object if the size of package is zero.
                 Package object if the size of package is not zero,
@@ -273,23 +287,8 @@ def receive_package(sock: Socket):
         return header
     payload = sock.recv(header.get_package_len(parse=True))
     data_type = header.get_package_data_type(parse=True)
-
     package = Package(payload=payload, data_type=data_type, header=header)
     return package
-
-# def receive_package(sock: Socket):
-#     # parse header
-#     header_data = sock.recv(Header.HEADER_LEN)
-#
-#     header = Header()
-#     header.load_from_header_data(header_data)
-#
-#     # package_len = int.from_bytes(header_data[:Header.HEADER_PACKAGE_LEN_LEN], byteorder='big', signed=False)
-#     #
-#     # if package_len == 0:
-#     #
-#     # b_package_hashcode = header_data[Header.HEADER_PACKAGE_HASHCODE_OFFSET:
-#     #                                  Header.HEADER_PACKAGE_HASHCODE_OFFSET + Header.HEADER_PACKAGE_HASHCODE_LEN]
 
 
 class LackOfMessageException(Exception):
