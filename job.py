@@ -1,6 +1,7 @@
 from client import Client
 from threading import Thread
 from package import Package, Header, PackageDataType
+import subprocess
 
 import time
 from typing import List
@@ -35,3 +36,17 @@ class Job:
     def __simulate_training_process(self, data_slice) -> int:
         time.sleep(1)
         return random.randint(0, 9999999)
+
+
+def start_subprocess():
+    def temp():
+        subprocess.run(["./venv/Scripts/python", "main.py"])
+
+    t = Thread(target=temp)
+    t.start()
+
+
+if __name__ == '__main__':
+    for i in range(2):
+        start_subprocess()
+        time.sleep(1)

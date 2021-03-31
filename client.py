@@ -39,17 +39,23 @@ class Client:
         self.sent_buffer: List[PackageWithTimer] = []
         self.socket: Socket = socket
 
-        self.start_receive_thread()
-        # self.start_send_thread()
+        # self.start_receive_thread()
+        self.start_send_thread()
 
     def add_data(self, item: Package):
         self.__data_buffer.append(item)
 
     def start_send_thread(self):
         def temp():
+            temp_data: int = 0
             while True:
-                if len(self.waiting_for_send_buffer) == self.cwnd:
-                    pass
+                package = Package(payload=int2bytes(temp_data), data_type=PackageDataType.INT)
+                package.generate_default_header()
+                package.get_header().set_package_seq(temp_data)
+
+                send_package(package, self.socket)
+                temp_data += 1
+                time.sleep(1)
 
         t = Thread(target=temp)
         t.start()
