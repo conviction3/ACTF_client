@@ -2,14 +2,23 @@ from client import Client
 from threading import Thread
 from package import Package, Header, PackageDataType
 import subprocess
+import socket
 
 import time
 from typing import List
 import random
 
 
+
 class Job:
     def __init__(self, client: Client):
+        # create socket instance
+        s = socket.socket()
+        # local host name
+        host = socket.gethostname()
+        # set server/proxy port
+        port = 23456
+
         self.__client = client
 
     def start_produce_thread(self):
