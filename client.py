@@ -130,7 +130,11 @@ class Client:
                 self.resending_flag = True
             else:
                 package = self.pack_data_buffer(buffer, self.cwnd)
-            send_package(package, self.socket)
+            try:
+                send_package(package, self.socket)
+            except (ConnectionAbortedError, ConnectionResetError):
+                log.info("Connection has been closed by proxy, remote job finished.")
+                return
             log.debug(
                 f"<- {package.get_desc()}"
             )
@@ -177,7 +181,11 @@ class Client:
     def start_receive_thread(self):
         def temp():
             while True:
-                result = receive_package(self.socket)
+                try:
+                    result = receive_package(self.socket)
+                except ConnectionAbortedError:
+                    log.info("Connection has been closed by proxy, remote job finished.")
+                    return
                 if isinstance(result, Header):
                     header = result
                     message = header.get_message(parse=True)
