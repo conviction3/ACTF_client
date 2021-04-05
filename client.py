@@ -24,40 +24,25 @@ class SeqData:
 class Client:
     BUFFER_MAX = 50
 
-    def __init__(self, socket, initial_cwnd: int = 1, initial_ssthresh: int = 24, initial_rto: int = 500):
+    def __init__(self, socket, initial_cwnd: int = 1, initial_ssthresh: int = 24, sending_time_interval=0.5):
         """
         :param socket:
-        :param initial_cwnd: Congestion window, default 1 package
-        :param initial_ssthresh: Slow start threshold, default 24 packages
-        :param initial_rto: Retransmission Time-Out, default 500ms
+        :param initial_cwnd:                Congestion window, default 1 package.
+        :param initial_ssthresh:            Slow start threshold, default 24 packages.
+        :param sending_time_interval:       The buffer data will be boxed then send every sending_time_interval
+                                        second, default 0.5s.
         """
         self.cwnd: int = initial_cwnd
         self.ssthresh: int = initial_ssthresh
-        self.rto: int = initial_rto
-
-        self.sending_time_interval = 0.5
-
-        # self.__data_buffer_lock = Lock()
-        """
-            The list of produce result, the result will be placed into the list as soon as the data be produced.
-        """
-        # self.__data_buffer: List[Package] = []
+        self.sending_time_interval = sending_time_interval
 
         # The item of the queue is class SeqData, it's thead-safe, and the data in queue is ordered.
         self.data_buffer: Queue = Queue(maxsize=Client.BUFFER_MAX)
 
         """
-            The item of the list is class Package, max len(waiting_for_send_buffer) = cwnd
-            The header in the buffer may be none, should be checked or generated before transmitting.
+            Every client has only one discarded package, this filed will be reset to None after resending
+        successfully.
         """
-        # self.waiting_for_send_buffer: List[Package] = []
-
-        """
-            Messages have been sent, but not received ACK from receiver.
-            Every sent message has a timer, if timeout, the sent message should be retransmitted.
-        Which means the message should be retrieved from sent_buffer to waiting_for_send_buffer.
-        """
-        # self.sent_buffer: List[PackageWithTimer] = []
         self.discard_package: Package = None
         # The content of resent_buffer is from resent_package unpacking
         self.resent_buffer: LifoQueue = LifoQueue(maxsize=Client.BUFFER_MAX)
@@ -68,7 +53,6 @@ class Client:
         self.socket: Socket = socket
 
         self.produce()
-        # self.start_receive_thread()
         self.start_send_thread()
 
     def produce(self):
@@ -178,6 +162,7 @@ class Client:
         t = Timer(self.sending_time_interval, temp)
         t.start()
 
+    # ---------------------------> deprecated for now <---------------------------------------
     def start_receive_thread(self):
         def temp():
             while True:
@@ -296,3 +281,4 @@ class Client:
         self.waiting_for_send_buffer.append(package)
         self.sent_buffer.remove(package_with_timer)
         log.debug(f"[.] Package xxx is out of time, will be retransmitted.")
+    # ---------------------------> deprecated for now <---------------------------------------
