@@ -24,7 +24,9 @@ class SeqData:
 class Client:
     BUFFER_MAX = 50
 
-    def __init__(self, socket, initial_cwnd: int = 1, initial_ssthresh: int = 24, sending_time_interval=0.5):
+    def __init__(self, socket, initial_cwnd: int = 1,
+                 initial_ssthresh: int = 24, sending_time_interval=0.5
+                 ):
         """
         :param socket:
         :param initial_cwnd:                Congestion window, default 1 package.
@@ -51,8 +53,21 @@ class Client:
         self.current_resent: int = -1
 
         self.socket: Socket = socket
+        """
+            This is a interface for user who can create a produce thread to solve
+        the specific problem by themselves. The thread just producing some data,
+        then add the data into data_buffer, the following stuff like transform the
+        buffer data to proxy would be done by the client automatically.
+        """
+        self.produce_thread: Thread = None
 
-        self.produce()
+        # self.produce()
+        # self.start_send_thread()
+
+    def start(self):
+        if self.produce_thread is None:
+            return
+        self.produce_thread.start()
         self.start_send_thread()
 
     def produce(self):

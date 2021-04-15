@@ -1,9 +1,37 @@
 import socket
 from app.utils import *
-import time
 from client import Client
+import sqlite3
+from queue import Queue, LifoQueue
+from client import SeqData
+from threading import Thread, Lock, Timer
+import sys
 
 log = Logger()
+
+
+def produce(record_start: int, record_end: int, group_size: int, buffer: Queue):
+    conn = sqlite3.connect('./data/test_data.db')
+    c = conn.cursor()
+    offset = record_start - 1
+    while offset < record_end:
+        cursor = c.execute(
+            f'''
+               SELECT id,number FROM random_numbers LIMIT {offset},{offset + group_size} 
+            '''
+        )
+        # fetch group_size data
+        temp_list = []
+        for row in cursor:
+            # print(f"{row[0]},{row[1]}")
+            temp_list.append(row[1])
+        result = min(temp_list)
+        if not buffer.full():
+            buffer.put(SeqData(seq=int(offset / group_size), data=result))
+        log.debug(f"[.] {offset + group_size}/{record_start}~{record_end}")
+        offset += group_size
+    log.debug(f"[+] {record_start}~{record_end}")
+
 
 if __name__ == '__main__':
     # create socket instance
@@ -21,4 +49,15 @@ if __name__ == '__main__':
      """)
     s.connect((host, port))
 
-    client = Client(socket=s)
+    # client1 = Client(socket=s)
+    # t1 = Thread(target=produce, args=(1, 200, 5, client1.data_buffer))
+    # client1.produce_thread = t1
+    # client1.start()
+
+    client1 = Client(socket=s)
+    t1 = Thread(target=produce, args=(int(sys.argv[1]),
+                                      int(sys.argv[2]),
+                                      int(sys.argv[3]),
+                                      client1.data_buffer))
+    client1.produce_thread = t1
+    client1.start()

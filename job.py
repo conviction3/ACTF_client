@@ -9,7 +9,6 @@ from typing import List
 import random
 
 
-
 class Job:
     def __init__(self, client: Client):
         # create socket instance
@@ -47,15 +46,17 @@ class Job:
         return random.randint(0, 9999999)
 
 
-def start_subprocess():
+def start_subprocess(*argv):
     def temp():
-        subprocess.run(["./venv/Scripts/python", "main.py"])
+        subprocess.run(["./venv/Scripts/python", "main.py",
+                        str(argv[0]), str(argv[1]), str(argv[2])
+                        ]
+                       )
 
     t = Thread(target=temp)
     t.start()
 
 
 if __name__ == '__main__':
-    for i in range(2):
-        start_subprocess()
-        time.sleep(1)
+    start_subprocess(1, 200, 10)
+    start_subprocess(201, 300, 10)
