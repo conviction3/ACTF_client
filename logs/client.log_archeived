@@ -1,0 +1,79 @@
+[2021-05-03 13:57:30,728] - main.py [Line:48] - [ INFO]-[thread:13876]-[process:11684] : 
+        ___    ______ ______ ______   ______ __     ____ ______ _   __ ______
+       /   |  / ____//_  __// ____/  / ____// /    /  _// ____// | / //_  __/
+      / /| | / /      / /  / /_     / /    / /     / / / __/  /  |/ /  / /
+     / ___ |/ /___   / /  / __/    / /___ / /___ _/ / / /___ / /|  /  / /
+    /_/  |_|\____/  /_/  /_/       \____//_____//___//_____//_/ |_/  /_/
+     
+[2021-05-03 13:57:30,738] - main.py [Line:30] - [DEBUG]-[thread:8136]-[process:11684] : [.] 10/1~200
+[2021-05-03 13:57:30,738] - main.py [Line:30] - [DEBUG]-[thread:8136]-[process:11684] : [.] 20/1~200
+[2021-05-03 13:57:30,739] - main.py [Line:30] - [DEBUG]-[thread:8136]-[process:11684] : [.] 30/1~200
+[2021-05-03 13:57:30,739] - main.py [Line:30] - [DEBUG]-[thread:8136]-[process:11684] : [.] 40/1~200
+[2021-05-03 13:57:30,739] - main.py [Line:30] - [DEBUG]-[thread:8136]-[process:11684] : [.] 50/1~200
+[2021-05-03 13:57:30,740] - main.py [Line:30] - [DEBUG]-[thread:8136]-[process:11684] : [.] 60/1~200
+[2021-05-03 13:57:30,740] - main.py [Line:30] - [DEBUG]-[thread:10088]-[process:8068] : [.] 210/201~300
+[2021-05-03 13:57:30,740] - main.py [Line:30] - [DEBUG]-[thread:8136]-[process:11684] : [.] 70/1~200
+[2021-05-03 13:57:30,740] - main.py [Line:30] - [DEBUG]-[thread:10088]-[process:8068] : [.] 220/201~300
+[2021-05-03 13:57:30,740] - main.py [Line:30] - [DEBUG]-[thread:8136]-[process:11684] : [.] 90/1~200
+[2021-05-03 13:57:30,740] - main.py [Line:30] - [DEBUG]-[thread:10088]-[process:8068] : [.] 230/201~300
+[2021-05-03 13:57:30,740] - main.py [Line:30] - [DEBUG]-[thread:8136]-[process:11684] : [.] 100/1~200
+[2021-05-03 13:57:30,740] - main.py [Line:30] - [DEBUG]-[thread:10088]-[process:8068] : [.] 240/201~300
+[2021-05-03 13:57:30,740] - main.py [Line:30] - [DEBUG]-[thread:8136]-[process:11684] : [.] 110/1~200
+[2021-05-03 13:57:30,741] - main.py [Line:30] - [DEBUG]-[thread:8136]-[process:11684] : [.] 120/1~200
+[2021-05-03 13:57:30,741] - main.py [Line:30] - [DEBUG]-[thread:8136]-[process:11684] : [.] 130/1~200
+[2021-05-03 13:57:30,741] - main.py [Line:30] - [DEBUG]-[thread:10088]-[process:8068] : [.] 250/201~300
+[2021-05-03 13:57:30,741] - main.py [Line:30] - [DEBUG]-[thread:8136]-[process:11684] : [.] 140/1~200
+[2021-05-03 13:57:30,742] - main.py [Line:30] - [DEBUG]-[thread:10088]-[process:8068] : [.] 260/201~300
+[2021-05-03 13:57:30,742] - main.py [Line:30] - [DEBUG]-[thread:8136]-[process:11684] : [.] 150/1~200
+[2021-05-03 13:57:30,742] - main.py [Line:30] - [DEBUG]-[thread:8136]-[process:11684] : [.] 160/1~200
+[2021-05-03 13:57:30,742] - main.py [Line:30] - [DEBUG]-[thread:10088]-[process:8068] : [.] 270/201~300
+[2021-05-03 13:57:30,742] - main.py [Line:30] - [DEBUG]-[thread:8136]-[process:11684] : [.] 170/1~200
+[2021-05-03 13:57:30,743] - main.py [Line:30] - [DEBUG]-[thread:8136]-[process:11684] : [.] 180/1~200
+[2021-05-03 13:57:30,743] - main.py [Line:30] - [DEBUG]-[thread:10088]-[process:8068] : [.] 280/201~300
+[2021-05-03 13:57:30,743] - main.py [Line:30] - [DEBUG]-[thread:8136]-[process:11684] : [.] 190/1~200
+[2021-05-03 13:57:30,744] - main.py [Line:30] - [DEBUG]-[thread:8136]-[process:11684] : [.] 200/1~200
+[2021-05-03 13:57:30,744] - main.py [Line:32] - [DEBUG]-[thread:8136]-[process:11684] : [+] 1~200
+[2021-05-03 13:57:30,745] - main.py [Line:30] - [DEBUG]-[thread:10088]-[process:8068] : [.] 300/201~300
+[2021-05-03 13:57:30,745] - main.py [Line:32] - [DEBUG]-[thread:10088]-[process:8068] : [+] 201~300
+[2021-05-03 13:57:31,247] - client.py [Line:138] - [DEBUG]-[thread:1212]-[process:11684] : <- hash: 2eba3fdb25682857526e2466459fd668 | seq: 0 | message: "" | package length: 8 | payload data type: integer | ACK:  | 
+[2021-05-03 13:57:31,247] - client.py [Line:138] - [DEBUG]-[thread:1212]-[process:8068] : <- hash: 568dab62300983ac32d18a24daab6e27 | seq: 0 | message: "" | package length: 8 | payload data type: integer | ACK:  |
+[2021-05-03 13:57:31,295] - client.py [Line:146] - [DEBUG]-[thread:1212]-[process:11684] : -> ack: 2eba3fdb25682857526e2466459fd668 | message: "Acknowledged"
+[2021-05-03 13:57:31,295] - client.py [Line:146] - [DEBUG]-[thread:4500]-[process:8068] : -> ack: 568dab62300983ac32d18a24daab6e27 | message: "Acknowledged" 
+[2021-05-03 13:57:31,804] - client.py [Line:138] - [DEBUG]-[thread:2356]-[process:11684] : <- hash: 83a659607f271736f4bb334e0b5cdc55 | seq: 1 | message: "" | package length: 16 | payload data type: integer | ACK:  | 
+[2021-05-03 13:57:31,804] - client.py [Line:138] - [DEBUG]-[thread:13408]-[process:8068] : <- hash: 828a1331383fa3592660156937bb00b4 | seq: 21 | message: "" | package length: 16 | payload data type: integer | ACK:  | 
+[2021-05-03 13:57:31,835] - client.py [Line:146] - [DEBUG]-[thread:13408]-[process:8068] : -> ack: 828a1331383fa3592660156937bb00b4 | message: "Acknowledged" 
+[2021-05-03 13:57:31,835] - client.py [Line:146] - [DEBUG]-[thread:2356]-[process:11684] : -> ack: 83a659607f271736f4bb334e0b5cdc55 | message: "Acknowledged" 
+[2021-05-03 13:57:32,344] - client.py [Line:138] - [DEBUG]-[thread:7840]-[process:11684] : <- hash: d80d06fc724d71585e8ffe8ed0d949e1 | seq: 3 | message: "" | package length: 32 | payload data type: integer | ACK:  | 
+[2021-05-03 13:57:32,344] - client.py [Line:138] - [DEBUG]-[thread:1992]-[process:8068] : <- hash: b47990e7cbe9b261619bf8a81269033b | seq: 23 | message: "" | package length: 32 | payload data type: integer | ACK:  | 
+[2021-05-03 13:57:32,423] - client.py [Line:146] - [DEBUG]-[thread:1992]-[process:8068] : -> ack: b47990e7cbe9b261619bf8a81269033b | message: "Acknowledged" 
+[2021-05-03 13:57:32,424] - client.py [Line:146] - [DEBUG]-[thread:7840]-[process:11684] : -> ack: d80d06fc724d71585e8ffe8ed0d949e1 | message: "Package has been discarded" 
+[2021-05-03 13:57:32,424] - client.py [Line:154] - [WARNING]-[thread:7840]-[process:11684] : package d80d06fc724d71585e8ffe8ed0d949e1 has been discarded, will be resend.
+[2021-05-03 13:57:32,424] - client.py [Line:112] - [DEBUG]-[thread:7840]-[process:11684] : resent buffer: [(6,11622), (5,11622), (4,26791), (3,59244)]
+[2021-05-03 13:57:32,929] - client.py [Line:125] - [ INFO]-[thread:10988]-[process:11684] : resent package d80d06fc724d71585e8ffe8ed0d949e1 | 1 of 4 | current package bd307a43e84f099fa456cf5299e8142f, cwnd: 1
+[2021-05-03 13:57:32,929] - client.py [Line:138] - [DEBUG]-[thread:12852]-[process:8068] : <- hash: 8bbe81ecb54f725a14e5a5e83f477cc0 | seq: 27 | message: "" | package length: 24 | payload data type: integer | ACK:  | 
+[2021-05-03 13:57:33,009] - client.py [Line:146] - [DEBUG]-[thread:10988]-[process:11684] : -> ack: bd307a43e84f099fa456cf5299e8142f | message: "Acknowledged" 
+[2021-05-03 13:57:33,009] - client.py [Line:146] - [DEBUG]-[thread:12852]-[process:8068] : -> ack: 8bbe81ecb54f725a14e5a5e83f477cc0 | message: "Acknowledged" 
+[2021-05-03 13:57:33,519] - client.py [Line:125] - [ INFO]-[thread:11688]-[process:11684] : resent package d80d06fc724d71585e8ffe8ed0d949e1 | 3 of 4 | current package 96945dfa9693d9bcdc9495cafbbed219, cwnd: 2
+[2021-05-03 13:57:33,519] - client.py [Line:138] - [DEBUG]-[thread:11688]-[process:11684] : <- hash: 96945dfa9693d9bcdc9495cafbbed219 | seq: 4 | message: "" | package length: 16 | payload data type: integer | ACK:  | 
+[2021-05-03 13:57:33,581] - client.py [Line:146] - [DEBUG]-[thread:11688]-[process:11684] : -> ack: 96945dfa9693d9bcdc9495cafbbed219 | message: "Acknowledged" 
+[2021-05-03 13:57:34,091] - client.py [Line:125] - [ INFO]-[thread:7384]-[process:11684] : resent package d80d06fc724d71585e8ffe8ed0d949e1 | 4 of 4 | current package 53da84249623875d699d1734c1c5e6dc, cwnd: 4
+[2021-05-03 13:57:34,091] - client.py [Line:138] - [DEBUG]-[thread:7384]-[process:11684] : <- hash: 53da84249623875d699d1734c1c5e6dc | seq: 6 | message: "" | package length: 8 | payload data type: integer | ACK:  | 
+[2021-05-03 13:57:34,155] - client.py [Line:146] - [DEBUG]-[thread:7384]-[process:11684] : -> ack: 53da84249623875d699d1734c1c5e6dc | message: "Acknowledged" 
+[2021-05-03 13:57:34,665] - client.py [Line:138] - [DEBUG]-[thread:13300]-[process:11684] : <- hash: 2aa8e5f0d37018b2af55972e5b76e227 | seq: 7 | message: "" | package length: 64 | payload data type: integer | ACK:  | 
+[2021-05-03 13:57:34,760] - client.py [Line:146] - [DEBUG]-[thread:13300]-[process:11684] : -> ack: 2aa8e5f0d37018b2af55972e5b76e227 | message: "Package has been discarded" 
+[2021-05-03 13:57:34,760] - client.py [Line:154] - [WARNING]-[thread:13300]-[process:11684] : package 2aa8e5f0d37018b2af55972e5b76e227 has been discarded, will be resend.
+[2021-05-03 13:57:34,760] - client.py [Line:112] - [DEBUG]-[thread:13300]-[process:11684] : resent buffer: [(14,7885), (13,16697), (12,16697), (11,16697), (10,11622), (9,11622), (8,11622), (7,11622)]
+[2021-05-03 13:57:35,269] - client.py [Line:125] - [ INFO]-[thread:10836]-[process:11684] : resent package 2aa8e5f0d37018b2af55972e5b76e227 | 1 of 8 | current package 53da84249623875d699d1734c1c5e6dc, cwnd: 1
+[2021-05-03 13:57:35,269] - client.py [Line:138] - [DEBUG]-[thread:10836]-[process:11684] : <- hash: 53da84249623875d699d1734c1c5e6dc | seq: 7 | message: "" | package length: 8 | payload data type: integer | ACK:  | 
+[2021-05-03 13:57:35,333] - client.py [Line:146] - [DEBUG]-[thread:10836]-[process:11684] : -> ack: 53da84249623875d699d1734c1c5e6dc | message: "Acknowledged" 
+[2021-05-03 13:57:35,844] - client.py [Line:125] - [ INFO]-[thread:2532]-[process:11684] : resent package 2aa8e5f0d37018b2af55972e5b76e227 | 3 of 8 | current package d2ab7693f1e8a3a71607809da4ed8721, cwnd: 2
+[2021-05-03 13:57:35,844] - client.py [Line:138] - [DEBUG]-[thread:2532]-[process:11684] : <- hash: d2ab7693f1e8a3a71607809da4ed8721 | seq: 8 | message: "" | package length: 16 | payload data type: integer | ACK:  | 
+[2021-05-03 13:57:35,908] - client.py [Line:146] - [DEBUG]-[thread:2532]-[process:11684] : -> ack: d2ab7693f1e8a3a71607809da4ed8721 | message: "Acknowledged" 
+[2021-05-03 13:57:36,418] - client.py [Line:125] - [ INFO]-[thread:13564]-[process:11684] : resent package 2aa8e5f0d37018b2af55972e5b76e227 | 7 of 8 | current package f673f7e93e524f22dc2783c7662d2712, cwnd: 4
+[2021-05-03 13:57:36,418] - client.py [Line:138] - [DEBUG]-[thread:13564]-[process:11684] : <- hash: f673f7e93e524f22dc2783c7662d2712 | seq: 10 | message: "" | package length: 32 | payload data type: integer | ACK:  | 
+[2021-05-03 13:57:36,482] - client.py [Line:146] - [DEBUG]-[thread:13564]-[process:11684] : -> ack: f673f7e93e524f22dc2783c7662d2712 | message: "Acknowledged" 
+[2021-05-03 13:57:36,991] - client.py [Line:125] - [ INFO]-[thread:4292]-[process:11684] : resent package 2aa8e5f0d37018b2af55972e5b76e227 | 8 of 8 | current package 2fd7a4e76f0bcc36aaa6a6b9b9087a43, cwnd: 8
+[2021-05-03 13:57:36,991] - client.py [Line:138] - [DEBUG]-[thread:4292]-[process:11684] : <- hash: 2fd7a4e76f0bcc36aaa6a6b9b9087a43 | seq: 14 | message: "" | package length: 8 | payload data type: integer | ACK:  | 
+[2021-05-03 13:57:37,038] - client.py [Line:146] - [DEBUG]-[thread:4292]-[process:11684] : -> ack: 2fd7a4e76f0bcc36aaa6a6b9b9087a43 | message: "Acknowledged" 
+[2021-05-03 13:57:37,548] - client.py [Line:138] - [DEBUG]-[thread:9392]-[process:11684] : <- hash: 43480cc60b36d48bce4cf49f5bd5811b | seq: 15 | message: "" | package length: 40 | payload data type: integer | ACK:  | 
+[2021-05-03 13:57:37,580] - client.py [Line:146] - [DEBUG]-[thread:9392]-[process:11684] : -> ack: 43480cc60b36d48bce4cf49f5bd5811b | message: "Acknowledged" 
