@@ -2,9 +2,9 @@ import socket
 from app.utils import *
 from client import Client
 import sqlite3
-from queue import Queue, LifoQueue
+from queue import Queue
 from client import SeqData
-from threading import Thread, Lock, Timer
+from threading import Thread
 import sys
 
 log = Logger()

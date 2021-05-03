@@ -39,7 +39,6 @@ def read_csv_int(file_name: str, from_index: int, to_index: int) -> list:
     :param from_index: start index, start from 0, include from_index
     :param to_index: end index,start from 0, exclude to_index
     :return: list of int
-    todo: use parquet
     """
     result_list = []
     with open(file_name, 'r') as f:
@@ -55,7 +54,6 @@ def add(data_list: list) -> int:
     sum of the list of int
     :param data_list: list of int
     :return: sum
-    todo: extend type
     """
     return sum(data_list)
 
