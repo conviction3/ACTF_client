@@ -1,8 +1,8 @@
-from package import Package, PackageWithTimer, Header, send_package, receive_package, PackageDataType
+from package import Package, Header, send_package, receive_package, PackageDataType
 from socket import socket as Socket
 from typing import List
-from threading import Thread, Lock, Timer
-from app.utils import Logger, int2bytes, int_list_to_bytes
+from threading import Thread, Timer
+from app.utils import Logger, int_list_to_bytes
 import time
 from queue import Queue, LifoQueue
 
@@ -49,8 +49,7 @@ class Client:
         # The content of resent_buffer is from resent_package unpacking
         self.resent_buffer: LifoQueue = LifoQueue(maxsize=Client.BUFFER_MAX)
         self.resending_flag: bool = False
-        self.total_resent: int = -1
-        self.current_resent: int = -1
+
 
         self.socket: Socket = socket
         """
@@ -86,7 +85,6 @@ class Client:
         t.start()
 
     def pack_data_buffer(self, buffer: Queue, pack_length) -> Package:
-        # buffer_length = buffer.qsize()
         payload: List[int] = []
         seq: int = -1
         pack_length = min(pack_length, buffer.qsize())
@@ -176,124 +174,3 @@ class Client:
         # check the buffer every second, if the buffer is not empty, combine the buffer into one
         t = Timer(self.sending_time_interval, temp)
         t.start()
-
-    # ---------------------------> deprecated for now <---------------------------------------
-    def start_receive_thread(self):
-        def temp():
-            while True:
-                try:
-                    result = receive_package(self.socket)
-                except ConnectionAbortedError:
-                    log.info("Connection has been closed by proxy, remote job finished.")
-                    return
-                if isinstance(result, Header):
-                    header = result
-                    message = header.get_message(parse=True)
-                    ack = header.get_ack(parse=True)
-                    log.debug(f"-> message: \"{message}\" "
-                              f"| ack: {ack} "
-                              f"| hash: {header.get_package_hashcode(parse=True)}")
-                    # resend the package
-                    if message == Header.MSG_PACKAGE_DISCARD:
-                        log.warning(f"package {ack} has been discarded, will be resend.")
-                else:
-                    package = result
-                    header = result.get_header()
-                    self.start_consume_thread(package)
-                    log.debug("-> " + package.get_desc())
-
-        t = Thread(target=temp)
-        t.start()
-
-    def start_consume_thread(self, package: Package):
-        """
-            Do calculate
-        :param package:
-        :return:
-        """
-
-        def temp():
-            payload: List[int] = package.get_payload(parse=True)
-            header = package.get_header()
-            package_hashcode = header.get_package_hashcode(parse=True)
-
-            log.info(f"--> Consuming package {package_hashcode}, job started.")
-            # todo: different type of calculation methods
-            cal_result: int = 0
-            for item in payload:
-                cal_result += item
-            time.sleep(2)
-            log.info(f"<-- Finished  package {package_hashcode}, job ended.")
-            # Sending the result to proxy
-            result_package = Package(payload=int2bytes(cal_result), data_type=PackageDataType.INT)
-            result_package.generate_default_header(msg=f"calculate result of {package_hashcode}")
-            result_package.get_header().set_ack(header.get_package_hashcode())
-            send_package(result_package, self.socket)
-            log.info(f"-> {result_package.get_desc()}")
-
-        t = Thread(target=temp)
-        t.start()
-        # No join() allowed here
-
-    def transmit_the_buffer(self):
-        """
-            Transmit the package in waiting_for_send_buffer to receiver. Only when the buffer is full
-        or the job is finished, then the packages should be sent.
-            It's not transmit batch, but one by one.
-        :return:
-        """
-        if len(self.waiting_for_send_buffer) == 0:
-            log.warning(f"[!!] waiting_for_send_buffer is empty, can not be transmitted now!")
-            return
-        for i in range(len(self.waiting_for_send_buffer)):
-            package = self.waiting_for_send_buffer[0]
-            if package.get_header() is None:
-                package.generate_default_header()
-
-            send_package(package, self.socket)
-
-            header = package.get_header()
-            log.debug(f"[->] Transmit package {header.get_package_hashcode().hex()}\t "
-                      f"message: {header.get_message(parse=True)}\t "
-                      f"payload size: {header.get_package_len(parse=True)}"
-                      )
-
-            package_with_timer = PackageWithTimer(package)
-            self.sent_buffer.append(package_with_timer)
-            del self.waiting_for_send_buffer[0]
-
-            # todo: check ack
-
-            # package_with_timer.timer = Timer(self.rto, self.__check_ack, args=(package_with_timer,))
-
-            # logging.debug(f"[--] Message xxx has been appended to sent_buffer, timer started")
-
-            # package_with_timer.timer=
-
-            # item = list1[0]
-            # del list1[0]
-            # print(f"{item} {list1}")
-
-    def __check_ack(self, package_with_timer: PackageWithTimer):
-        """
-            It's for timer function, can not be called directly.
-            If this client received the specific package ACK from proxy on time,
-        then this package will be removed from sent_buffer, which means the package
-        has been sent successfully. Otherwise, the package had been aborted by the
-        receiver, has to be resent.
-        :param package_with_timer
-                    The ack_flag of package_with_timer should always not be true,
-                because if once package has been sent successfully (received the
-                ACK of the package), the package object with the timer should be
-                destroyed immediately.
-        :return:
-        """
-        # todo: double check
-        if package_with_timer.ack_flag:
-            return
-        # out of time
-        package = package_with_timer.package
-        self.waiting_for_send_buffer.append(package)
-        self.sent_buffer.remove(package_with_timer)
-        log.debug(f"[.] Package xxx is out of time, will be retransmitted.")
-    # ---------------------------> deprecated for now <---------------------------------------

@@ -17,13 +17,12 @@ def produce(record_start: int, record_end: int, group_size: int, buffer: Queue):
     while offset < record_end:
         cursor = c.execute(
             f'''
-               SELECT id,number FROM random_numbers LIMIT {offset},{offset + group_size} 
+               SELECT id,number FROM random_numbers LIMIT {offset},{group_size} 
             '''
         )
         # fetch group_size data
         temp_list = []
         for row in cursor:
-            # print(f"{row[0]},{row[1]}")
             temp_list.append(row[1])
         result = min(temp_list)
         if not buffer.full():
@@ -50,9 +49,10 @@ if __name__ == '__main__':
     s.connect((host, port))
 
     # client1 = Client(socket=s)
-    # t1 = Thread(target=produce, args=(1, 200, 5, client1.data_buffer))
+    # t1 = Thread(target=produce, args=(1, 200, 10, client1.data_buffer))
     # client1.produce_thread = t1
     # client1.start()
+    # produce(1,200,10,client1.data_buffer)
 
     client1 = Client(socket=s)
     t1 = Thread(target=produce, args=(int(sys.argv[1]),
