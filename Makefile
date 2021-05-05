@@ -8,8 +8,7 @@ install:
 	.\venv\Scripts\pip install -r requirements.txt -i https://mirrors.aliyun.com/pypi/simple/
 
 run:
-	.\venv\Scripts\python main.py
-	.\venv\Scripts\python main2.py
+	.\venv\Scripts\python job.py
 
 unittest:
 	.\venv\Scripts\python -m unittest test/test_utils.py
